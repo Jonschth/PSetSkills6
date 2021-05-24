@@ -52,6 +52,41 @@ f2(my_birthday)
 
 ```
 
+1.3.a
 
 
+}
+```{r}
+
+variance <- function(x, na.rm = TRUE) {
+  n <- length(x)
+  m <- mean(x, na.rm = TRUE)
+  err2 <- (x - m)^2
+  sum(err2) / (n - 1)
+  
+}
+
+
+x=c(1,2,3,4)
+
+variance(x)
+```
+1.3.b
+
+
+```{r}
+
+skewness <- function(x, na.rm = FALSE) {
+  n <- length(x)
+  m <- mean(x, na.rm = na.rm)
+  v <- var(x, na.rm = na.rm)
+  (sum((x - m) ^ 3) / (n - 2)) / v ^ (3 / 2)
+}
+
+
+x=c(1,2,3,4,8)
+
+skewness(x)
+
+```
 
