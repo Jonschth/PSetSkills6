@@ -7,6 +7,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+```{r}
+library(lubridate)
+library(base)
+
+```
+
 1.1
 ```{r}
 f1 <-function(x) {
@@ -19,6 +26,32 @@ f1 <-function(x) {
 f1(c("a","b","c"))
 
 ```
+1.2
+```{r}
+
+now()
+
+
+
+
+start = as.Date("1948-12-07")
+end = as.Date(now())
+end
+
+floor(as.numeric(difftime(end, start, unit="weeks")) / 52.25)
+
+
+f2 <-function(start) {
+  end=as.Date(now())
+  floor(as.numeric(difftime(end, start, unit="weeks")) / 52.25)
+}
+
+my_birthday=("1996-04-09")
+
+f2(my_birthday)
+
+```
+
 
 
 
