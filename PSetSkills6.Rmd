@@ -12,10 +12,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(lubridate)
 library(base)
 library(tidyverse)
+library(purrr)
 
 ```
 
-1.1
+1.1 Function to transfrom a vector to a string
 ```{r}
 f1 <-function(x) {
   if (length(x)<3){
@@ -27,7 +28,7 @@ f1 <-function(x) {
 f1(c("a","b","c"))
 
 ```
-1.2
+1.2 function that uses my birthday to calculate my age
 ```{r}
 
 now()
@@ -53,10 +54,8 @@ f2(my_birthday)
 
 ```
 
-1.3.a
+1.3.a function to calculate variance
 
-
-}
 ```{r}
 
 variance <- function(x, na.rm = TRUE) {
@@ -72,13 +71,13 @@ x=c(1,2,3,4)
 
 variance(x)
 ```
-1.3.b
+1.3.b function to calculate skewness
 
 
 ```{r}
 
 skewness <- function(x, na.rm = FALSE) {
-  n <- length(x)
+  n <- length(x) 
   m <- mean(x, na.rm = na.rm)
   v <- var(x, na.rm = na.rm)
   (sum((x - m) ^ 3) / (n - 2)) / v ^ (3 / 2)
@@ -91,7 +90,7 @@ skewness(x)
 
 ```
 
-1.3.c
+1.3.c function to calculate mean, variance and skewness
 
 
 
@@ -124,7 +123,7 @@ view(stats_summary(diamonds))
 ```
 
 
-1.4 
+1.4 I have renamed the functions
 
 
 ```{r}
@@ -151,7 +150,7 @@ drop_last_element(c("fgaæ","ljl","hggf"))
 
 
 ```
-1.5
+1.5 A greeting function based on the hour
 
 ```{r}
 greet <- function(time = lubridate::now()) {
@@ -177,7 +176,7 @@ greet <- function(time = lubridate::now()) {
 ```
 
 
-2.1.a
+2.1.a loop to calculate the mean
 
 ```{r}
 calculate_mean <- vector("double", ncol(mtcars))
@@ -191,7 +190,7 @@ for (i in names(mtcars)) {
 calculate_mean
 ```
 
-2.1.b
+2.1.b loop to count the numbber of unique values
 
 ```{r}
 data("mpg")
@@ -204,7 +203,7 @@ for (i in names(mpg)) {
 
 mpg_uniq
 ```
-2.1.c
+2.1.c general poisson distributions
 
 ```{r}
 n <- 10
@@ -217,13 +216,12 @@ for (i in seq_along(poissons)) {
 
 poissons
 ```
-2.2 Combining csv files
+2.2 Combining csv files with a for lopp
 
 ```{r}
 
 files <- dir("c:/users/lenovo/downloads/", pattern = "\\.csv$", full.names = TRUE)
 files
-#> [1] "data//file1.csv" "data//file2.csv" "data//file3.csv"
 
 df_list <- vector("list", length(files))
 
@@ -237,6 +235,97 @@ combined_csv_files<-(bind_rows(df_list))
 
 combined_csv_files
 ```
-2.3
+2.3 printing mean of the iris database columns
 
+
+```{r}
+show_mean <- function(df, digits = 5) {
+  maxstr <- max(str_length(names(df)))
+  for (nm in names(df)) {
+    if (is.numeric(df[[nm]])) {
+      cat(
+        str_c(str_pad(str_c(nm, ":"), maxstr + 1L, side = "right"),
+          format(mean(df[[nm]]), digits = digits, nsmall = digits),
+          sep = " "
+        ),
+        "\n"
+      )
+    }
+  }
+}
+
+show_mean(iris)
+```
+
+2.4 Code with the map function
+
+2.4.a mean of every column
+```{r}
+map_dbl(mtcars,mean)
+
+
+```
+
+2.4.b  the number of unique values in mpg
+
+```{r}
+map_int(mpg,n_distinct)
+
+```
+
+2.4.c random poissons using map
+
+```{r}
+map(c(-1, 3, 10,30, 100), ~rpois(n = 10, lambda = .))
+
+```
+
+
+2.5 Repeat question 2.5 using map functions
+
+```{r}
+
+files <- dir("c:/users/lenovo/downloads/", pattern = "\\.csv$", full.names = TRUE)
+files
+
+
+df_list <- list(files)
+
+df_list %>%
+  pmap(read_csv) %>% 
+  reduce(bind_rows)
+
+```
+2.6 What happens when we use vectors with maps instead of lists?
+
+```{r}
+five_squares <- (1:5)^2
+five_squares
+```
+
+
+
+2.6.a
+In this case the rnorm function generates 5 single instances normal random variates from the normal distribution: 
+```{r}
+map(list(five_squares),rnorm)
+
+
+```
+
+
+
+
+2.6.b
+In this case the rnorm function generates 1, 4, 9, 16 and 25 cases of normal variates 
+```{r}
+map(five_squares,rnorm)
+```
+
+
+2.6.c.
+In this case the rnorm function generates 5 x 5  instances of normal random variates:
+```{r}
+map(five_squares, rnorm, n = 5)
+```
 
