@@ -113,10 +113,81 @@ stats_summary <- function(df){
     as.data.frame( row.name = "skewness")
 
   df_4 <-rbind(df_1,df_2,df_3)
+  cbind(statistic=c("mean","variance","skewness"),df_4)
 }
+
+
 
 view(stats_summary(diamonds))
              
 
 ```
+
+
+1.4 
+
+
+```{r}
+ check_first_letter_of_string <- function(string, prefix){
+str_sub(string, 1, nchar(prefix)) == prefix
+}
+
+check_first_letter_of_string("-15894329847", "-")
+
+```
+
+
+```{r}
+
+drop_last_element <- function(x){
+if (length(x) <= 1)return(NULL)
+x[-length(x)]
+}
+
+
+drop_last_element(c("fgaæ","ljl","hggf"))
+
+
+
+
+```
+1.5
+
+```{r}
+greet <- function(time = lubridate::now()) {
+  hr <- lubridate::hour(time)
+  if (hr < 12) {
+    print("good morning")
+  } else if (hr < 17) {
+    print("good afternoon")
+  } else {
+    print("good evening")
+  }
+}
+  
+  greet(ymd_h("2021-05-25:19"))
+  
+  greet( ymd_h("2021-05-25:14"))
+  
+  greet( ymd_h("2021-05-25:11"))
+  
+  greet( ymd_h("2021-05-25:01"))
+  
+  greet()
+```
+
+greet <- function(time = lubridate::now()) {
+  hr <- lubridate::hour(time)
+  # I don't know what to do about times after midnight,
+  # are they evening or morning?
+  if (hr < 12) {
+    print("good morning")
+  } else if (hr < 17) {
+    print("good afternoon")
+  } else {
+    print("good evening")
+  }
+}
+  
+  greet(ymd_h("2017-01-08:05"))
 
